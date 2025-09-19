@@ -1,15 +1,5 @@
-export type ProductType = {
-  _id: number;
-  name: string;
-  price: number;
-  category: string;
-  description: string;
-};
+import type { ProductType } from "../data/products";
 
-export const categories = [
-  { id: "mobiles", name: "Mobiles" },
-  { id: "appliances", name: "Home Appliances" },
-];
 
 const API_URL = "https://e-commercemanagementsystem.onrender.com/api/products";
 

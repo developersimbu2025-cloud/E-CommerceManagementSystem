@@ -4,9 +4,10 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-  type ProductType,
 } from "../services/productService";
-import { categories } from "../services/productService";
+import type { ProductType } from "../data/products";
+
+import { categories } from "../data/products";
 import Button from "../component/ui/button";
 import Modal from "../component/ui/Modal";
 import Dropdown from "../component/ui/dropdown";

@@ -7,7 +7,6 @@ export type ProductType = {
 };
 
 export const categories = [
-  { id: "mobiles", name: "Mobiles", count: 7 },
-  { id: "appliances", name: "Home Appliances", count: 7 },
+  { id: "mobiles", name: "Mobiles" },
+  { id: "appliances", name: "Home Appliances" },
 ];
-
