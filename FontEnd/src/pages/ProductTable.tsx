@@ -4,21 +4,21 @@ import {
   createProduct,
   updateProduct,
   deleteProduct,
-  type ProductType,
 } from "../services/productService";
+import type { ProductType } from "../data/products";
 import Button from "../component/ui/button";
 import Modal from "../component/ui/Modal";
 
 const ProductTable = () => {
   const [product, setProduct] = useState<ProductType[]>([]);
-  const [editId, setEditId] = useState<number | null>(null);
+  const [editId, setEditId] = useState<string | null>(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const [formData, setFormData] = useState<ProductType>({
-    _id: 0,
-    productName: "",
-    productPrice: 0,
-    productDescription: "",
+  const [formData, setFormData] = useState<Omit<ProductType, "_id">>({
+    name: "",
+    price: 0,
+    description: "",
+    category: "mobiles",
   });
 
   const fetchProduct = async () => {
@@ -31,12 +31,7 @@ const ProductTable = () => {
   }, []);
 
   const resetForm = () => {
-    setFormData({
-      _id: 0,
-      productName: "",
-      productPrice: 0,
-      productDescription: "",
-    });
+    setFormData({ name: "", price: 0, description: "", category: "mobiles" });
     setEditId(null);
   };
 
@@ -46,7 +41,12 @@ const ProductTable = () => {
   };
 
   const handleEdit = (item: ProductType) => {
-    setFormData(item); // pre-fill form with selected product
+    setFormData({
+      name: item.name,
+      price: item.price,
+      description: item.description,
+      category: item.category ?? "mobiles",
+    });
     setEditId(item._id);
     setIsOpen(true);
   };
@@ -55,10 +55,8 @@ const ProductTable = () => {
     e.preventDefault();
 
     if (editId) {
-      // update existing product
-      await updateProduct(editId.toString(), formData);
+      await updateProduct(editId, formData);
     } else {
-      // create new product
       await createProduct(formData);
     }
 
@@ -68,19 +66,18 @@ const ProductTable = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
     setFormData((prev) => ({
       ...prev,
-      [name]: name === "productPrice" ? Number(value) : value, // ensure price is number
+      [name]: name === "price" ? Number(value) : value,
     }));
   };
 
-  const handleDelete = async (id: number) => {
-    await deleteProduct(id.toString());
-    await fetchProduct(); // refresh list after delete
+  const handleDelete = async (id: string) => {
+    await deleteProduct(id);
+    await fetchProduct();
   };
 
   return (
@@ -88,84 +85,51 @@ const ProductTable = () => {
       <div className="flex justify-end">
         <Button onClick={handleAdd}>Create Product</Button>
       </div>
+
       {/* Desktop View */}
       <table className="hidden md:table w-full rounded-lg">
         <thead className="bg-gray-100">
           <tr>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-              ID
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-              Product Name
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-              Description
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-              Price ($)
-            </th>
-            <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
-              Action
-            </th>
+            <th className="px-4 py-3 text-left">#</th>
+            <th className="px-4 py-3 text-left">Name</th>
+            <th className="px-4 py-3 text-left">Description</th>
+            <th className="px-4 py-3 text-left">Price ($)</th>
+            <th className="px-4 py-3 text-left">Action</th>
           </tr>
         </thead>
         <tbody>
           {product.map((item, index) => (
-            <tr key={item._id} className="border-t border-gray-200">
-              <td className="px-4 py-3 text-sm text-gray-600">{index + 1}</td>
-              <td className="px-4 py-3 text-sm text-gray-600">
-                {item.productName}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-600">
-                {item.productDescription}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-600">
-                ${item.productPrice}
-              </td>
-              <td className="px-4 py-3 text-sm text-gray-600">
-                <div className="flex space-x-2">
-                  <div
-                    onClick={() => handleEdit(item)}
-                    className="font-bold cursor-pointer"
-                  >
-                    Edit
-                  </div>
-                  <div
-                    onClick={() => handleDelete(item._id)}
-                    className="font-bold cursor-pointer"
-                  >
-                    Delete
-                  </div>
-                </div>
+            <tr key={item._id} className="border-t">
+              <td className="px-4 py-3">{index + 1}</td>
+              <td className="px-4 py-3">{item.name}</td>
+              <td className="px-4 py-3">{item.description}</td>
+              <td className="px-4 py-3">${item.price}</td>
+              <td className="px-4 py-3 flex space-x-2">
+                <span
+                  onClick={() => handleEdit(item)}
+                  className="cursor-pointer text-blue-600 font-semibold"
+                >
+                  Edit
+                </span>
+                <span
+                  onClick={() => handleDelete(item._id)}
+                  className="cursor-pointer text-red-600 font-semibold"
+                >
+                  Delete
+                </span>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      {/* Mobile View (Card layout) */}
+      {/* Mobile View */}
       <div className="md:hidden space-y-4">
         {product.map((item) => (
-          <div
-            key={item._id}
-            className="border rounded-lg shadow-sm p-4 bg-white"
-          >
-            <div className="flex justify-between py-1">
-              <span className="font-medium text-gray-700">ID:</span>
-              <span className="text-gray-600">{item._id}</span>
-            </div>
-            <div className="flex justify-between py-1">
-              <span className="font-medium text-gray-700">Name:</span>
-              <span className="text-gray-600">{item.productName}</span>
-            </div>
-            <div className="flex justify-between py-1">
-              <span className="font-medium text-gray-700">Description:</span>
-              <span className="text-gray-600">{item.productDescription}</span>
-            </div>
-            <div className="flex justify-between py-1">
-              <span className="font-medium text-gray-700">Price:</span>
-              <span className="text-gray-600">${item.productPrice}</span>
-            </div>
+          <div key={item._id} className="border rounded-lg p-4 bg-white">
+            <div>Name: {item.name}</div>
+            <div>Description: {item.description}</div>
+            <div>Price: ${item.price}</div>
           </div>
         ))}
       </div>
@@ -176,59 +140,53 @@ const ProductTable = () => {
         title={editId ? "Update Product" : "Create Product"}
       >
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Product Name <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              value={formData.productName}
-              name="productName"
-              onChange={handleChange}
-              placeholder="Please enter product name"
-              className="mt-1 w-full border rounded-md px-3 py-2 text-sm border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-          </div>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Enter product name"
+            className="w-full border rounded-md px-3 py-2"
+          />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Description <span className="text-red-500">*</span>
-            </label>
-            <textarea
-              value={formData.productDescription}
-              name="productDescription"
-              onChange={handleChange}
-              placeholder="Please enter product description"
-              className="mt-1 w-full border rounded-md px-3 py-2 text-sm border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            ></textarea>
-          </div>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            placeholder="Enter product description"
+            className="w-full border rounded-md px-3 py-2"
+          />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Price <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="number"
-              value={formData.productPrice}
-              name="productPrice"
-              onChange={handleChange}
-              placeholder="Please enter price"
-              className="mt-1 w-full border rounded-md px-3 py-2 text-sm border-gray-300 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-            />
-          </div>
+          <input
+            type="number"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            placeholder="Enter price"
+            className="w-full border rounded-md px-3 py-2"
+          />
 
-          {/* Actions */}
+          <select
+            name="category"
+            value={formData.category}
+            onChange={handleChange}
+            className="w-full border rounded-md px-3 py-2"
+          >
+            <option value="mobiles">Mobiles</option>
+            <option value="appliances">Appliances</option>
+          </select>
+
           <div className="flex justify-end space-x-2">
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="cursor-pointer px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+              className="px-4 py-2 bg-gray-200 rounded-md"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="cursor-pointer px-4 py-2 bg-[#3e3e3e] text-white rounded-md hover:bg-blue-700"
+              className="px-4 py-2 bg-black text-white rounded-md"
             >
               {editId ? "Update" : "Create"}
             </button>

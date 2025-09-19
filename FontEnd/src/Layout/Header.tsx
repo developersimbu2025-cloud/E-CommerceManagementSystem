@@ -1,4 +1,4 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SearchInput from "../component/ui/search";
 import { ShoppingCart, Heart, Menu, User } from "lucide-react";
 import { useAppSelector } from "../store/hooks";

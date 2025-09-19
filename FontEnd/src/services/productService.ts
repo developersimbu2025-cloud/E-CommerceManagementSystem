@@ -1,6 +1,6 @@
 import type { ProductType } from "../data/products";
 
-const API_URL = "http://localhost:4000/api/products";
+const API_URL = "https://e-commercemanagementsystem.onrender.com/api/products";
 
 // Get all products
 export const getProduct = async (): Promise<ProductType[]> => {
@@ -10,11 +10,9 @@ export const getProduct = async (): Promise<ProductType[]> => {
 };
 
 // Create a new product
-export const createProduct = async (product: {
-  name: string;
-  price: number;
-  description: string;
-}): Promise<ProductType> => {
+export const createProduct = async (
+  product: Omit<ProductType, "_id">
+): Promise<ProductType> => {
   const res = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -35,10 +33,10 @@ export const deleteProduct = async (
 
 // Update a product by ID
 export const updateProduct = async (
-  _id: string,
-  product: ProductType
+  id: string,
+  product: Omit<ProductType, "_id">
 ): Promise<ProductType> => {
-  const res = await fetch(`${API_URL}/${_id}`, {
+  const res = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(product),
@@ -54,7 +52,7 @@ export const getSingleProduct = async (id: string): Promise<ProductType> => {
   return res.json();
 };
 
-// Get all products (alternative method if needed)
+// Get all products (duplicate helper if needed)
 export const getAllProducts = async (): Promise<ProductType[]> => {
   const res = await fetch(API_URL);
   if (!res.ok) throw new Error("Failed to fetch products");
