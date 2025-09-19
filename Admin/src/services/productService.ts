@@ -11,7 +11,7 @@ export const categories = [
   { id: "appliances", name: "Home Appliances" },
 ];
 
-const API_URL = "http://localhost:4000/api/products";
+const API_URL = "https://e-commercemanagementsystem.onrender.com/api/products";
 
 export const getProduct = async () => {
   const res = await fetch(API_URL);
