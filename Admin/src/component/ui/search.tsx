@@ -1,6 +1,3 @@
-import { Search as SearchIcon } from "lucide-react";
-import Button from "./button";
-
 type SearchProps = {
   type?: "text" | "number" | "email";
   placeholder?: string;
