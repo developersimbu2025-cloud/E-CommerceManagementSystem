@@ -21,6 +21,23 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     image: { type: String }, // store image URL/path
+    originalPrice: {
+      type: Number,
+      required: true,
+    },
+    rating: {
+      type: Number,
+      required: true,
+    },
+
+    reviews: {
+      type: Number,
+      required: true,
+    },
+    inStock: {
+      type: Boolean,
+      required: true,
+    },
   },
   { timestamps: true }
 );

@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import Label from "../component/ui/label";
 import Input from "../component/ui/input";
 import Button from "../component/ui/button";
-import { Validation } from "../data/Validation";
-import { loginSuccess, setLoading } from "../store/slices/authSlice.ts";
-import { useAppDispatch } from "../store/hooks";
+import { Mail, Lock, Loader2 } from "lucide-react";
+import { loginUser } from "../services/authService";
+
 type LoginFormType = {
   email: string;
   password: string;
@@ -13,53 +13,37 @@ type LoginFormType = {
 
 const Login = () => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
 
   const [formData, setFormData] = useState<LoginFormType>({
     email: "",
     password: "",
   });
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [loading, setLoading] = useState(false);
 
-  const handleInputChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const { name, value } = e.target;
-      setFormData((prev) => ({ ...prev, [name]: value }));
-      if (errors[name]) {
-        setErrors((prev) => ({ ...prev, [name]: "" }));
-      }
-    },
-    [errors]
-  );
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
 
-  const handleSubmit = useCallback(
-    (e: React.FormEvent) => {
-      e.preventDefault();
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
 
-      const validationErrors = Validation(formData);
-      if (Object.keys(validationErrors).length > 0) {
-        setErrors(validationErrors);
-        return;
-      }
-      dispatch(setLoading(true));
-
-      setTimeout(() => {
-        dispatch(
-          loginSuccess({
-            id: "1",
-            email: formData.email,
-            name: formData.email.split("@")[0],
-          })
-        );
-        navigate("/");
-      }, 1000);
-    },
-    [formData, Validation, dispatch, navigate]
-  );
+    try {
+      const data = await loginUser(formData);
+      localStorage.setItem("token", data.token);
+      navigate(from, { replace: true }); // redirect to attempted page
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#0d61fd] flex items-center justify-center">
-      {/* Login Form */}
       <div className="w-full max-w-md bg-white p-5 border border-[#e5e7eb] shadow">
         <div className="flex flex-col items-center justify-center p-6">
           <div className="text-2xl font-semibold">Sign In</div>
@@ -67,36 +51,47 @@ const Login = () => {
             Enter your credentials to access your account
           </div>
         </div>
-        <form onClick={handleSubmit} className="space-y-6">
+
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <Label htmlFor="email" text="Email Address" />
-            <Input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="Enter your email"
-            />
-            {errors.email && <p className="text-red-600">{errors.email}</p>}
+            <div className="relative">
+              <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                placeholder="Enter your email"
+                className="pl-10"
+                autoComplete="username"
+              />
+            </div>
           </div>
 
           <div>
             <Label htmlFor="password" text="Password" />
-            <Input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleInputChange}
-              placeholder="Enter your password"
-            />
-            {errors.password && (
-              <p className="text-red-600">{errors.password}</p>
-            )}
+            <div className="relative">
+              <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                placeholder="Enter your password"
+                className="pl-10"
+                autoComplete="current-password"
+              />
+            </div>
           </div>
 
-          {/* Submit Button */}
-          <Button type="submit" className="w-full text-white bg-[#0d61fd]">
-            Sign In
+          <Button
+            type="submit"
+            className="w-full text-white bg-[#0d61fd] px-2 py-2 flex justify-center items-center"
+            disabled={loading} // ✅ disables the button when loading is true
+          >
+            {loading && <Loader2 className="animate-spin mr-2 h-4 w-4" />}
+            {loading ? "Signing In..." : "Sign In"}
           </Button>
         </form>
 

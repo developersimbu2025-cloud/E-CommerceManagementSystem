@@ -1,11 +1,5 @@
-
-
 const Analytics: React.FC = () => {
-  return (
-    <div>
-       Analytics
-    </div>
-  )
-}
+  return <div>Analytics</div>;
+};
 
-export default Analytics
+export default Analytics;

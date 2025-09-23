@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import type { ProductType } from "../data/products";
 import ApplePhone from "../assets/Mobiles/Apple.webp";
+import WishlistButton from "./ui/WishlistButton";
 
 type ProductCardProps = {
   product: ProductType;
@@ -8,7 +9,12 @@ type ProductCardProps = {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
-    <div className="text-center rounded-md flex justify-center border border-gray-200 p-5">
+    <div className="relative text-center rounded-md flex justify-center border border-gray-200 p-5">
+     
+        <div className="absolute top-2 right-2">
+          <WishlistButton/>
+        </div>
+     
       <Link to={`/product/${product._id}`}>
         <img
           src={ApplePhone}

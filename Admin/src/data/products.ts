@@ -4,6 +4,11 @@ export type ProductType = {
   price: number;
   category: string;
   description: string;
+  originalPrice?: number;
+  rating?: number;
+  reviews?: number;
+  inStock?: boolean;
+  image?: string;
 };
 
 export const categories = [

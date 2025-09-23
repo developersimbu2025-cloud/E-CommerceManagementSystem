@@ -6,19 +6,6 @@ import { ArrowLeft, Minus, Plus, Trash2 } from "lucide-react";
 const Cart: React.FC = () => {
   return (
     <div>
-      {/* <div className="container mx-auto px-4 py-8 text-center">
-        <h1 className="text-3xl font-bold mb-4">Your Cart is Empty</h1>
-        <p className="text-muted-foreground mb-6">
-          Start shopping to add items to your cart.
-        </p>
-        <Link
-          to="/"
-          className="inline-block bg-blue-600 text-white px-4 py-2 rounded-md"
-        >
-          Go to Shop
-        </Link>
-      </div> */}
-
       <div className="min-h-screen py-8 bg-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between mb-8">

@@ -2,13 +2,12 @@
 import SideBarItem from "./SideBarItem";
 
 const SideItems = [
-  { label: "Dashboard", href: "/" },
+  { label: "Dashboard", href: "/dashboard" },
   { label: "Products", href: "/products" },
   { label: "Orders", href: "/orders" },
   { label: "Inventory", href: "/inventory" },
   { label: "Customers", href: "/customers" },
   { label: "Analytics", href: "/analytics" },
-  
 ];
 
 type SidebarProps = {

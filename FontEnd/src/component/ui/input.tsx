@@ -6,6 +6,8 @@ type InputProps = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   disabled?: boolean;
+  className?:string
+  autoComplete?:string
 };
 
 const Input = ({
@@ -16,11 +18,13 @@ const Input = ({
   onChange,
   required = false,
   disabled = false,
+  className,
+  autoComplete 
 }: InputProps) => {
   return (
     <div>
       <input
-        className={`flex h-10 w-full rounded-md border px-3 py-2 text-base bg-[#faf8f5] border-[#e5e7eb] text-[0.875rem]`}
+        className={`${className} flex h-10 w-full rounded-md border px-3 py-2 text-base bg-[#faf8f5] border-[#e5e7eb] text-[0.875rem]`}
         placeholder={placeholder}
         type={type}
         name={name}
@@ -28,6 +32,7 @@ const Input = ({
         onChange={onChange}
         required={required}
         disabled={disabled}
+        autoComplete={autoComplete}
       />
     </div>
   );

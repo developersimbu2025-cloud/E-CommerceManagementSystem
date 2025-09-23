@@ -20,7 +20,7 @@ const Button = React.memo(
       <button
         type={type}
         onClick={onClick}
-        className={`px-2 py-1 rounded text-md bg-[#3e3e3e] text-white cursor-pointer disabled:opacity-50 ${className}`}
+        className={`px-2 py-1 rounded  bg-[#3e3e3e] text-white cursor-pointer disabled:opacity-50 ${className}`}
         disabled={disabled}
       >
         {children}

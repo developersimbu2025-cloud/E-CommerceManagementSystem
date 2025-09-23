@@ -1,5 +1,30 @@
 const Product = require("../models/product");
 
+// 🔍 Search products by name or category
+exports.searchProduct = async (req, res) => {
+  try {
+    const { name, category } = req.query;
+
+    // Build search filter
+    let filter = {};
+
+    if (name) {
+      // Case-insensitive partial search
+      filter.name = { $regex: name, $options: "i" };
+    }
+
+    if (category) {
+      filter.category = { $regex: category, $options: "i" };
+    }
+
+    const products = await Product.find(filter);
+
+    res.json(products);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // Get all Product
 
 exports.getProduct = async (req, res) => {
@@ -15,14 +40,29 @@ exports.getProduct = async (req, res) => {
 
 exports.createProduct = async (req, res) => {
   try {
-    const { name, price, category, description } = req.body;
+    const {
+      name,
+      price,
+      originalPrice,
+      category,
+      description,
+      rating,
+      reviews,
+      inStock,
+    } = req.body;
+
     const product = new Product({
       name,
       price,
+      originalPrice,
       category,
       description,
-      image: req.file ? `/uploads/${req.file.filename}` : null, // store file path
+      rating,
+      reviews,
+      inStock,
+      image: req.file ? `/uploads/${req.file.filename}` : null, // fixed template literal
     });
+
     await product.save();
     res.status(201).json(product);
   } catch (err) {
@@ -33,18 +73,31 @@ exports.createProduct = async (req, res) => {
 // Update product (with optional image)
 exports.updateProduct = async (req, res) => {
   try {
-    const { name, price, category, description } = req.body;
+    const {
+      name,
+      price,
+      originalPrice,
+      category,
+      description,
+      rating,
+      reviews,
+      inStock,
+    } = req.body;
 
     const product = await Product.findById(req.params.id);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
 
-    // Update fields
+    // Update fields if provided
     product.name = name || product.name;
     product.price = price || product.price;
+    product.originalPrice = originalPrice || product.originalPrice;
     product.category = category || product.category;
     product.description = description || product.description;
+    product.rating = rating || product.rating;
+    product.reviews = reviews || product.reviews;
+    product.inStock = inStock || product.inStock;
 
     if (req.file) {
       product.image = `/uploads/${req.file.filename}`;

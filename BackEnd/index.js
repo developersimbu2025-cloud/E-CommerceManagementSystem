@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 const cors = require("cors");
+const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const path = require("path");
 
@@ -25,6 +26,8 @@ app.use(
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
+
+app.use("/api", authRoutes);
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

@@ -2,10 +2,11 @@ type InputProps = {
   placeholder: string;
   type: string;
   name?: string;
-  value?: string;
+  value?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   required?: boolean;
   disabled?: boolean;
+  className?: string;
 };
 
 const Input = ({
@@ -16,11 +17,12 @@ const Input = ({
   onChange,
   required = false,
   disabled = false,
+  className,
 }: InputProps) => {
   return (
     <div>
       <input
-        className={`flex h-10 w-full rounded-md border px-3 py-2 text-base bg-[#faf8f5] border-[#e5e7eb] text-[0.875rem]`}
+        className={`${className} flex  w-full rounded-md border px-3 py-2 text-sm border-gray-300 `}
         placeholder={placeholder}
         type={type}
         name={name}

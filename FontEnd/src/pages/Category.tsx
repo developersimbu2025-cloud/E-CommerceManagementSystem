@@ -8,7 +8,7 @@ const Category: React.FC = () => {
   const { name } = useParams<{ name: string }>();
   const [product, setProduct] = useState<ProductType[]>([]);
 
-  // Fetch products once when the component mounts
+ 
   useEffect(() => {
     const fetchProducts = async () => {
       try {

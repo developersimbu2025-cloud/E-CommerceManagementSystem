@@ -1,11 +1,7 @@
-import React from 'react'
+import React from "react";
 
 const Inventory: React.FC = () => {
-  return (
-    <div>
-        Analytics
-    </div>
-  )
-}
+  return <div>Analytics</div>;
+};
 
-export default Inventory
+export default Inventory;

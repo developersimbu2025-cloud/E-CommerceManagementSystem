@@ -10,6 +10,7 @@ import Orders from "./pages/Orders";
 import Inventory from "./pages/Inventory";
 import Customers from "./pages/Customers";
 import Analytics from "./pages/Analytics";
+import PrivateRoute from "./component/PrivateRoute";
 
 function App() {
   return (
@@ -19,7 +20,15 @@ function App() {
           <Router>
             <Routes>
               <Route element={<Layout />}>
-                <Route path="/" element={<Dashboard />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <PrivateRoute>
+                      <Dashboard />
+                    </PrivateRoute>
+                  }
+                />
+
                 <Route path="/products" element={<Products />} />
                 <Route path="/orders" element={<Orders />} />
                 <Route path="/inventory" element={<Inventory />} />

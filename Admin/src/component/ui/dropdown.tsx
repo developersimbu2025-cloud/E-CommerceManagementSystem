@@ -41,16 +41,14 @@ const Dropdown = ({
   };
 
   return (
-    <div className="relative inline-block w-64  text-sm font-medium text-gray-700">
-      {label && (
-        <label className="mb-1 font-medium text-gray-700">{label}</label>
-      )}
+    <div className="relative inline-block w-full text-sm font-medium ">
+      {label && <label className="mb-1 font-medium ">{label}</label>}
 
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="mt-1 w-full border px-3 py-2 rounded-md bg-white shadow-sm 
-                   hover:border-blue-400 focus:ring-2 focus:ring-blue-500 
+        className="mt-1 w-full text-sm text-inherit  font-normal  border border-gray-300 px-3 py-2 rounded-md bg-white 
+                  
                    flex items-center justify-between"
         aria-expanded={isOpen}
       >

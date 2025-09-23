@@ -8,12 +8,15 @@ import Poster from "../assets/poster.webp";
 const Home: React.FC = () => {
   const [product, setProduct] = useState<ProductType[]>([]);
 
-  const fetchProduct = async () => {
-    const data = await getProduct();
-    setProduct(data);
-  };
-
   useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const data = await getProduct();
+        setProduct(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
     fetchProduct();
   }, []);
 

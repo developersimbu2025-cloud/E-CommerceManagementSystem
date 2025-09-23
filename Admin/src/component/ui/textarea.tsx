@@ -7,6 +7,7 @@ type TextareaProps = {
   required?: boolean;
   disabled?: boolean;
   rows: number;
+  className: string;
 };
 
 const Textarea = ({
@@ -18,11 +19,12 @@ const Textarea = ({
   required = false,
   disabled = false,
   rows,
+  className,
 }: TextareaProps) => {
   return (
     <div>
       <textarea
-        className={`flex  w-full rounded-md border px-3 py-2 text-base bg-[#faf8f5] border-[#e5e7eb] text-[0.875rem]`}
+        className={`${className} flex  w-full rounded-md border px-3 py-2 text-sm border-gray-300 `}
         placeholder={placeholder}
         name={name}
         value={value}

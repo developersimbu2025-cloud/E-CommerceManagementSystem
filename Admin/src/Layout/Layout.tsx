@@ -1,7 +1,8 @@
-import { Outlet} from "react-router-dom";
+import { Outlet } from "react-router-dom";
 
 import Sidebar from "../component/Sidebar/SideBar";
 import { useState } from "react";
+import Header from "./Header";
 
 const Layout = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,12 +10,12 @@ const Layout = () => {
   // login page-க்கு header/footer hide
 
   return (
-    <div className="min-h-screen flex bg-[#f5f6fa]">
+    <div className="min-h-screen flex bg-[#f5f6fa] ">
       {/* Desktop Sidebar */}
-      <aside className="w-64  h-full hidden md:flex flex-col">
+      <aside className="w-64  h-full hidden md:flex flex-col border-r  border-gray-200">
         <div className="p-4 border-b border-gray-200">
           <h1 className="text-1xl font-bold text-gray-800">
-            E-Commerce Management System
+            Mobiles Product Management System
           </h1>
         </div>
         <div className="flex-1 overflow-y-auto">
@@ -56,7 +57,8 @@ const Layout = () => {
         )}
 
         {/* Page Content */}
-        <main className="flex-1 p-6 overflow-auto ">
+        <main className="flex-1  overflow-auto p-5 ">
+          <Header />
           <Outlet />
         </main>
       </div>

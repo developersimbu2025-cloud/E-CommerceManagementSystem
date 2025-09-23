@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import SearchInput from "../component/ui/search";
 import { ShoppingCart, Heart, Menu, User } from "lucide-react";
 import { useAppSelector } from "../store/hooks";
-import Button from "../component/ui/button";
+
 import { useCallback, useState } from "react";
 import NavBar from "../component/menu/NavBar";
 
@@ -26,6 +26,11 @@ const Header = () => {
     },
     [searchQuery, navigate]
   );
+
+  const handleLogout = () => {
+    localStorage.removeItem("token"); // remove token
+    navigate("/login"); // redirect to login
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-white ">
@@ -62,14 +67,12 @@ const Header = () => {
           )}
 
           <Link to="/wishlist" className="relative">
-            <Button>
-              <Heart className="w-5 h-5" />
-              {wishlistItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
-                  {wishlistItemCount}
-                </span>
-              )}
-            </Button>
+            <Heart className="w-5 h-5" />
+            {wishlistItemCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+                {wishlistItemCount}
+              </span>
+            )}
           </Link>
 
           <Link
@@ -83,6 +86,13 @@ const Header = () => {
               </span>
             )}
           </Link>
+
+          <button
+            className="font-semibold cursor-pointer"
+            onClick={handleLogout}
+          >
+            Logout
+          </button>
 
           <div className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? "✖" : <Menu className="w-5 h-5" />}

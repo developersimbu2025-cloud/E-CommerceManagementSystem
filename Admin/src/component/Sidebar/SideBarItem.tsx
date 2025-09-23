@@ -24,19 +24,13 @@ const SideBarItem: React.FC<SideBarItemProps> = ({ items, onClick }) => {
               to={item.href}
               onClick={onClick}
               className={`block px-4 py-2 rounded font-medium transition ${
-                isActive
-                  ? "bg-[#0000000a] "
-                  : "text-gray-800 hover:bg-gray-200"
+                isActive ? "bg-[#0000000a] " : "text-gray-800 hover:bg-gray-200"
               }`}
             >
               {item.label}
             </Link>
           );
         })}
-      </div>
-      <div className="md:hidden">
-        {/* Mobile view button logic can go here if needed */}
-        xxxxxxxxxxxxx
       </div>
     </div>
   );

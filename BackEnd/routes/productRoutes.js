@@ -25,8 +25,12 @@ const upload = multer({
 router.get("/", productController.getProduct);
 router.post("/", upload.single("image"), productController.createProduct);
 
+// 🔍 Search route MUST be above `/:id`
+router.get("/search", productController.searchProduct);
+
 router.get("/:id", productController.getProductById);
 router.put("/:id", upload.single("image"), productController.updateProduct);
 router.delete("/:id", productController.deleteProduct);
+
 
 module.exports = router;
